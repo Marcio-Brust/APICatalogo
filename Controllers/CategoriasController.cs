@@ -17,7 +17,7 @@ namespace APICatalogo.Controllers
     [ApiController]
     public class CategoriasController : ControllerBase
     {
-    private readonly ILogger<CategoriasController> _logger;
+        private readonly ILogger<CategoriasController> _logger;
 
         private readonly AppDbContext _context;
 
@@ -40,24 +40,24 @@ namespace APICatalogo.Controllers
         }
 
 
-        [HttpGet("produtos")]
+        [HttpGet("categoria")]
         public ActionResult<IEnumerable<Categoria>> GetCategoriaProguto()
-    {
-            return _context.Categorias.Include(p=> p.Produtos).Where(c=>c.CategoriaId <= 5).ToList();
-    }
+        {
+            return _context.Categorias.Include(p => p.Produtos).Where(c => c.CategoriaId <= 5).ToList();
+        }
 
         [HttpGet]
         public ActionResult<IEnumerable<Categoria>> Get()
         {
             try
             {
-           
-               return _context.Categorias.AsNoTracking().ToList(); 
+
+                return _context.Categorias.AsNoTracking().ToList();
             }
             catch (Exception)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Ocorreu um problema ao tratar a sua solicitação.");
-                
+
             }
         }
 
@@ -65,23 +65,24 @@ namespace APICatalogo.Controllers
 
         public ActionResult<Categoria> Get(int id)
         {
-            
+
             try
             {
-                  var categoria = _context.Categorias.FirstOrDefault(p => p.CategoriaId == id);
+                /*   throw new Exception("Exceção ao retornar categoria pelo id"); */
+                var categoria = _context.Categorias.FirstOrDefault(p => p.CategoriaId == id);
 
-            if (categoria is null)
-            {
-                return NotFound($"Categoria com id {id} não encontrado");
-            }
-            return Ok(categoria);
+                if (categoria is null)
+                {
+                    return NotFound($"Categoria com id {id} não encontrado");
+                }
+                return Ok(categoria);
             }
             catch (Exception)
             {
-               return StatusCode(StatusCodes.Status500InternalServerError, "Ocorreu um problema ao tratar a sua solicitação.");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Ocorreu um problema ao tratar a sua solicitação.");
             }
 
-          
+
         }
 
         [HttpPost]
@@ -111,11 +112,11 @@ namespace APICatalogo.Controllers
             return Ok(categoria);
 
         }
-        
-         [HttpDelete("{id:int}")]
-        
+
+        [HttpDelete("{id:int}")]
+
         public ActionResult<Categoria> Delete(int id)
-    {
+        {
             var categoria = _context.Categorias.FirstOrDefault(p => p.CategoriaId == id);
 
             if (categoria is null)
@@ -126,6 +127,6 @@ namespace APICatalogo.Controllers
             _context.SaveChanges();
 
             return Ok(categoria);
-    }
+        }
     }
 }
